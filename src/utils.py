@@ -1,10 +1,11 @@
 from config import VACANCIES_PATH_JSON
 from src.hh_api import VacanciesAPI
-from src.vacancy import Vacancy
 from src.json_save import JsonSave
+from src.vacancy import Vacancy
 
 
 def user_interaction() -> None:
+    """Функция для взаимодействия с пользователем"""
 
     keyword = input("Введите название интересующей вас профессии: ").lower()
     per_page = int(input("Какое количество профессий вывести: "))
@@ -14,7 +15,7 @@ def user_interaction() -> None:
     vacancies = [Vacancy.from_hh_dict(vacancy) for vacancy in vacancies]
     vacancies = sorted(vacancies, reverse=True)
 
-    print("Топ выбранных вакансии с HeadHunter по заработной плате: \n")
+    print("Вот ТОП списка выбранных вакансий по заработной плате: \n")
     for i in sorted(vacancies, reverse=True):
         print(i)
 
