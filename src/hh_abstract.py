@@ -5,7 +5,7 @@ import requests
 
 
 class GetVacancies(ABC):
-    """Абстрактный метод для работы с API"""
+    """Абстрактный класс для работы с API"""
 
     @abstractmethod
     def __init__(self):

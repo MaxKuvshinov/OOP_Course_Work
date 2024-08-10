@@ -29,7 +29,7 @@ class Vacancy:
 
     def __lt__(self, other: "Vacancy") -> bool:
         """Сравнение по заработной плате"""
-        return self.salary_from < other.salary_from
+        return self.salary_from > other.salary_from
 
     @classmethod
     def from_hh_dict(cls, data: Dict) -> "Vacancy":

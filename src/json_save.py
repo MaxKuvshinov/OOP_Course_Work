@@ -6,6 +6,7 @@ from src.save_file import Save
 
 class JsonSave(Save):
     """Класс, который сохраняет, перезаписывает и удаляет данные из JSON - файла"""
+
     def __init__(self, filename: str):
         super().__init__(filename)
 

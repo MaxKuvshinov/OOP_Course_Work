@@ -3,6 +3,8 @@ from typing import Dict, List
 
 
 class Save(ABC):
+    """Абстрактный класс для работы с файлом"""
+
     def __init__(self, filename: str):
         self.filename = filename
 
