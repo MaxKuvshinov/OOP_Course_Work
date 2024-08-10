@@ -1,5 +1,6 @@
 import requests
 from src.hh_abstract import GetVacancies
+from typing import List, Dict
 
 
 class VacanciesAPI(GetVacancies):
@@ -9,10 +10,18 @@ class VacanciesAPI(GetVacancies):
         self.headers = {"User-Agent": "HH-User-Agent"}
         self.params = self.params = {"text": "", "per_page": "", "only_with_salary": True}
 
-    def get_response(self, keyword, per_page):
-        self.params["text"] = keyword
-        self.params["per_page"] = per_page
-        return requests.get(self.url, params=self.params)
+    def get_response(self, keyword: str, per_page: int) -> requests.Response:
+        self.params.update({"text": keyword, "per_page": per_page})
+        try:
+            response = requests.get(self.url, params=self.params, headers=self.headers)
+            response.raise_for_status()
+            return response
+        except requests.RequestException as e:
+            print(f"Ошибка получения данных из API: {e}")
+            return None
 
-    def get_vacancies(self, keyword, per_page):
-        return self.get_response(keyword, per_page).json()["items"]
+    def get_vacancies(self, keyword: str, per_page: int) -> List[Dict]:
+        response = self.get_response(keyword, per_page)
+        if response:
+            return response.json().get("items", [])
+        return []

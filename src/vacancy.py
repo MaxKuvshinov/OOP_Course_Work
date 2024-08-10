@@ -1,13 +1,16 @@
+from typing import Dict, Optional
+
+
 class Vacancy:
     """Класс предоставляющий данные о вакансиях"""
-    def __init__(self, name, alternate_url, salary_from, salary_to, requirement):
+    def __init__(self, name: str, alternate_url: str, salary_from: Optional[int], salary_to: Optional[int], requirement: Optional[str]):
         self.name = name
         self.alternate_url = alternate_url
-        self.salary_from = salary_from
-        self.salary_to = salary_to
+        self.salary_from = salary_from or 0
+        self.salary_to = salary_to or 0
         self.requirement = requirement
 
-    def __str__(self):
+    def __str__(self) -> str:
         return (
             f"Название вакансии: {self.name}\n"
             f"Ссылка на данную вакансию: {self.alternate_url}\n"
@@ -15,28 +18,28 @@ class Vacancy:
             f"Описание вакансии: {self.requirement}"
         )
 
-    def __lt__(self, other):
-        return self.salary_from < self.salary_to
-
-    def __gt__(self, other):
-        return self.salary_from > self.salary_to
+    def __lt__(self, other: "Vacancy") -> bool:
+        return self.salary_from < other.salary_from
 
     @classmethod
-    def vacancy_dict(cls, data):
-        vacancies = []
-        for item in data:
-            name = item["name"],
-            url = item["alternate_url"],
-            salary_from = item["salary"]["from"],
-            salary_to = item["salary"]["to"],
-            requirement = item["snippet"]["requirement"]
-            vacancy = cls(
-                name=name,
-                url=url,
-                salary_from=salary_from,
-                salary_to=salary_to,
-                requirement=requirement
-            )
-            vacancies.append(vacancy)
-        return vacancies
+    def from_hh_dict(cls, data: Dict) -> "Vacancy":
+        """ Метод возвращает экземпляр класса в виде списка """
 
+        salary = data.get("salary", {})
+        return cls(
+            data["name"],
+            data["alternate_url"],
+            salary.get("from", 0),
+            salary.get("to", 0),
+            data["snippet"].get("requirement")
+        )
+
+    def to_dict(self) -> Dict:
+        """Convert a Vacancy instance to a dictionary."""
+        return {
+            "name": self.name,
+            "alternate_url": self.alternate_url,
+            "salary_from": self.salary_from,
+            "salary_to": self.salary_to,
+            "requirement": self.requirement,
+        }
